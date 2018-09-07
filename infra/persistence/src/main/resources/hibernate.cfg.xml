@@ -12,13 +12,17 @@
   		<property name="connection.password">Chictiongson21</property>
   		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
   		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-  		<property name="current_session_context_class">thread</property>
-      <!-- <property name="show_sql">true</property>
-  		<property name="format_sql">true</property>
-       -->
-  		<mapping resource="employee.hbm.xml"/>
-  		<mapping resource="roles.hbm.xml"/>
-  		<mapping resource="contact.hbm.xml"/>
+      <property name="hibernate.cache.use_second_level_cache">true</property>
+      <property name="hibernate.cache.use_query_cache">true</property>
+      <!-- <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property> -->
+      <property name="hibernate.cache.region.factory_class"> org.hibernate.cache.ehcache.EhCacheRegionFactory </property>
+      <property name="hibernate.generate_statistics">true</property>
+      <property name="show_sql">true</property>
+      <property name="format_sql">true</property>
+
+    	<mapping class="com.apm.core.Employee"/>
+  		<mapping class="com.apm.core.Contact"/>
+  		<mapping class="com.apm.core.Roles"/>
 
   </session-factory>
 

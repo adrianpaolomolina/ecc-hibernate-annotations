@@ -9,7 +9,7 @@ import org.hibernate.cfg.Configuration;
 
   static {
     try {
-<span class="nc" id="L12">      sessionFactory = new Configuration().configure( &quot;/hibernate.cfg.xml&quot; ).buildSessionFactory();</span>
+<span class="nc" id="L12">      sessionFactory = new Configuration().configure(&quot;/hibernate.cfg.xml&quot;).buildSessionFactory();</span>
 <span class="nc" id="L13">    } catch ( Throwable ex ) {</span>
 <span class="nc" id="L14">      System.err.println ( &quot;Failed to create Session Factory!&quot; + ex );</span>
 <span class="nc" id="L15">      throw new ExceptionInInitializerError( ex );</span>

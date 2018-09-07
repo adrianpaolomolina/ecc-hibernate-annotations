@@ -1,46 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainUI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">User Interface</a> &gt; <a href="index.source.html" class="el_package">com.apm.app</a> &gt; <span class="el_source">MainUI.java</span></div><h1>MainUI.java</h1><pre class="source lang-java linenums">package com.apm.app;
 
+import java.util.logging.Level;
 import com.apm.utility.InputUtility;
 
-<span class="nc" id="L5">public class MainUI</span>
+<span class="nc" id="L6">public class MainUI</span>
 {
-    public static void printChooseFunction() {
-<span class="nc" id="L8">      System.out.println ( &quot; ======== MAIN MENU ======== \n\n &quot;</span>
+    private static void printChooseFunction() {
+<span class="nc" id="L9">      System.out.println ( &quot; ======== MAIN MENU ======== \n\n &quot;</span>
                          + &quot; 1. Employees \n &quot;
-                         + &quot; 2. Contacts \n &quot;
-                         + &quot; 3. Roles \n &quot;
-                         + &quot; 4. Exit \n &quot;
+                         + &quot; 2. Roles \n &quot;
+                         + &quot; 3. Exit \n &quot;
                          );
 <span class="nc" id="L14">    }</span>
 
-    public static void MainOperation() {
+    private static void MainOperation() {
       do {
 <span class="nc" id="L18">        System.out.print(&quot;\033\143\n&quot;);</span>
 <span class="nc" id="L19">        printChooseFunction();</span>
 <span class="nc" id="L20">        String selection = InputUtility.inputChoice(&quot;Select Operation: &quot;);</span>
-<span class="nc bnc" id="L21" title="All 5 branches missed.">        switch(selection){</span>
+<span class="nc bnc" id="L21" title="All 4 branches missed.">        switch(selection){</span>
           case &quot;1&quot;:
 <span class="nc" id="L23">            EmployeeUI.getInstance().runEmployeeUI();</span>
 <span class="nc" id="L24">            break;</span>
           case &quot;2&quot;:
-<span class="nc" id="L26">            ContactUI.getInstance().runContactUI();</span>
+<span class="nc" id="L26">            RoleUI.getInstance().runRoleUI();</span>
 <span class="nc" id="L27">            break;</span>
           case &quot;3&quot;:
-<span class="nc" id="L29">            RoleUI.getInstance().runRoleUI();</span>
-<span class="nc" id="L30">            break;</span>
-          case &quot;4&quot;:
-<span class="nc" id="L32">            System.out.println(&quot;Thank you for using the program.&quot;);</span>
-<span class="nc" id="L33">            System.exit(0);</span>
+<span class="nc" id="L29">            System.out.println(&quot;Thank you for using the program.&quot;);</span>
+<span class="nc" id="L30">            System.exit(0);</span>
           default:
-<span class="nc" id="L35">            System.out.println(&quot;Invalid Input!&quot;);</span>
+<span class="nc" id="L32">            System.out.println(&quot;Invalid Input!&quot;);</span>
             break;
         }
-<span class="nc" id="L38">      } while ( true );</span>
+<span class="nc" id="L35">      } while ( true );</span>
     }
 
-    public static void main( String[] args )
+    public   static void main( String[] args )
     {
-<span class="nc" id="L43">        MainOperation();</span>
-<span class="nc" id="L44">    }</span>
+<span class="nc" id="L40">        java.util.logging.Logger.getLogger(&quot;org.hibernate&quot;).setLevel(Level.OFF);</span>
+<span class="nc" id="L41">        MainOperation();</span>
+<span class="nc" id="L42">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>

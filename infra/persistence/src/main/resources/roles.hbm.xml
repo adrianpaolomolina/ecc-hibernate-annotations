@@ -7,13 +7,12 @@
 
    <class name="Roles" table="Roles">
       <id name="roleID" column="Role_ID" type="long">
-         <generator class="identity"/>
+         <generator class="sequence">
+         <param name="sequence">roles_role_id_seq</param>
+         </generator>
       </id>
       <property name="role" column="Roles" type="string"/>
-      <set name="employees" table="Employee_Role" lazy="false" fetch="select" inverse="true">
-         <key column="Role_ID"/>
-         <many-to-many column="Employee_ID" class="Employee"/>
-      </set>
+
   </class>
 
 </hibernate-mapping>

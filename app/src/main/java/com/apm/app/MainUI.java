@@ -1,19 +1,19 @@
 package com.apm.app;
 
+import java.util.logging.Level;
 import com.apm.utility.InputUtility;
 
 public class MainUI
 {
-    public static void printChooseFunction() {
+    private static void printChooseFunction() {
       System.out.println ( " ======== MAIN MENU ======== \n\n "
                          + " 1. Employees \n "
-                         + " 2. Contacts \n "
-                         + " 3. Roles \n "
-                         + " 4. Exit \n "
+                         + " 2. Roles \n "
+                         + " 3. Exit \n "
                          );
     }
 
-    public static void MainOperation() {
+    private static void MainOperation() {
       do {
         System.out.print("\033\143\n");
         printChooseFunction();
@@ -23,12 +23,9 @@ public class MainUI
             EmployeeUI.getInstance().runEmployeeUI();
             break;
           case "2":
-            ContactUI.getInstance().runContactUI();
-            break;
-          case "3":
             RoleUI.getInstance().runRoleUI();
             break;
-          case "4":
+          case "3":
             System.out.println("Thank you for using the program.");
             System.exit(0);
           default:
@@ -38,8 +35,9 @@ public class MainUI
       } while ( true );
     }
 
-    public static void main( String[] args )
+    public   static void main( String[] args )
     {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         MainOperation();
     }
 }

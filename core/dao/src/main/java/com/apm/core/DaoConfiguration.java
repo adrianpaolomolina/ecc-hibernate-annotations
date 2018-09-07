@@ -9,7 +9,7 @@ public class DaoConfiguration {
 
   static {
     try {
-      sessionFactory = new Configuration().configure( "/hibernate.cfg.xml" ).buildSessionFactory();
+      sessionFactory = new Configuration().configure("/hibernate.cfg.xml").buildSessionFactory();
     } catch ( Throwable ex ) {
       System.err.println ( "Failed to create Session Factory!" + ex );
       throw new ExceptionInInitializerError( ex );

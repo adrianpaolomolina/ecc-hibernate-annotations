@@ -1,2 +1,4 @@
+com/apm/core/EmployeeDao.class
+com/apm/core/RolesDao.class
 com/apm/core/DaoConfiguration.class
 com/apm/core/Dao.class

@@ -7,7 +7,9 @@
 
    <class name="Contact" table="Contacts">
       <id name="contactId" column="Contact_ID" type="long">
-         <generator class="identity"/>
+         <generator class="sequence">
+         <param name="sequence">contacts_contact_id_seq</param>
+        </generator>
       </id>
       <property name="contactType" column="Contact_Type" type="string"/>
       <property name="contact" column="Contact" type="string"/>

@@ -1,5 +1,9 @@
 package com.apm.core;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Address {
 
   private int streetNumber;
@@ -20,6 +24,7 @@ public class Address {
     this.zipCode = zipCode;
   }
 
+  @Column( name = "Street_No" )
   public int getStreetNumber() {
     return this.streetNumber;
   }
@@ -28,6 +33,7 @@ public class Address {
     this.streetNumber = streetNumber;
   }
 
+  @Column( name = "Street_Name" )
   public String getStreetName() {
     return this.streetName;
   }
@@ -36,6 +42,7 @@ public class Address {
     this.streetName = streetName;
   }
 
+  @Column( name = "Barangay" )
   public String getBarangay() {
     return this.barangay;
   }
@@ -44,6 +51,7 @@ public class Address {
     this.barangay = barangay;
   }
 
+  @Column( name = "City" )
   public String getCity() {
     return this.city;
   }
@@ -52,6 +60,7 @@ public class Address {
     this.city = city;
   }
 
+  @Column( name = "Zip_Code")
   public String getZipCode() {
     return this.zipCode;
   }

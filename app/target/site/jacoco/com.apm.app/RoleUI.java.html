@@ -5,102 +5,102 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.apm.core.Roles;
-import com.apm.core.EmployeeController;
 import com.apm.utility.InputUtility;
 import com.apm.core.Employee;
+import com.apm.core.RoleController;
 
 import org.hibernate.exception.ConstraintViolationException;
 
 <span class="nc" id="L14">public class RoleUI {</span>
 
-<span class="nc" id="L16">  public static String message = &quot;&quot;;</span>
+<span class="nc" id="L16">  private static RoleController roleController = new RoleController();</span>
 
-  public static void printRoleMenu() {
-<span class="nc" id="L19">    System.out.println ( &quot;\n ======== ROLE MENU ========\n\n &quot;</span>
+<span class="nc" id="L18">  public static String message = &quot;&quot;;</span>
+
+  private static void printRoleMenu() {
+<span class="nc" id="L21">    System.out.println ( &quot;\n ======== ROLE MENU ========\n\n &quot;</span>
                        + &quot; 1. Create Role \n &quot;
                        + &quot; 2. Update Role \n &quot;
                        + &quot; 3. List Roles \n &quot;
                        + &quot; 4. Delete Roles \n &quot;
                        + &quot; 5. Go Back To Main Menu \n &quot;);
-<span class="nc" id="L25">  }</span>
+<span class="nc" id="L27">  }</span>
 
   public void runRoleUI() {
-<span class="nc" id="L28">    System.out.println (message);</span>
-<span class="nc" id="L29">    message = &quot;&quot;;</span>
     do {
 <span class="nc" id="L31">      printRoleMenu();</span>
 <span class="nc" id="L32">      String selection = InputUtility.inputChoice( &quot;Select Operation: &quot; );</span>
       try {
 <span class="nc bnc" id="L34" title="All 6 branches missed.">        switch( selection ) {</span>
           case &quot;1&quot;:
-<span class="nc" id="L36">            System.out.println ( addNewRole() );</span>
+<span class="nc" id="L36">            System.out.println(addNewRole());</span>
 <span class="nc" id="L37">            break;</span>
           case &quot;2&quot;:
 <span class="nc" id="L39">            message = updateRole();</span>
 <span class="nc" id="L40">            break;</span>
           case &quot;3&quot;:
-<span class="nc" id="L42">            System.out.println ( retrieveAllRoles() );</span>
+<span class="nc" id="L42">            System.out.println(retrieveAllRoles());</span>
 <span class="nc" id="L43">            break;</span>
           case &quot;4&quot;:
-<span class="nc" id="L45">            System.out.println ( removeRole() );</span>
+<span class="nc" id="L45">            System.out.println(removeRole());</span>
 <span class="nc" id="L46">            break;</span>
           case &quot;5&quot;:
 <span class="nc" id="L48">            break;</span>
           default:
-<span class="nc" id="L50">            System.out.println ( &quot;\nInput not valid! &quot;);</span>
+<span class="nc" id="L50">            System.out.println(&quot;\nInput not valid!&quot;);</span>
         }
 <span class="nc bnc" id="L52" title="All 2 branches missed.">        if ( selection.equals(&quot;5&quot;) ) {</span>
 <span class="nc" id="L53">          break;</span>
         }
 <span class="nc" id="L55">      } catch ( Exception e ) {</span>
-<span class="nc" id="L56">        System.out.println (message);</span>
-<span class="nc" id="L57">      }</span>
-<span class="nc" id="L58">    } while ( true );</span>
-<span class="nc" id="L59">  }</span>
+<span class="nc" id="L56">      }</span>
+<span class="nc" id="L57">    } while ( true );</span>
+<span class="nc" id="L58">  }</span>
 
-  public static String updateRole() throws Exception {
-    try {
-<span class="nc" id="L63">      System.out.println ( retrieveAllRoles() );</span>
-<span class="nc" id="L64">      Roles role = EmployeeController.retrieveRole ( InputUtility.inputPositiveNumber ( &quot;\n Input ID of Role to Update: &quot;, false ) );</span>
-<span class="nc" id="L65">      message = EmployeeController.editRole ( role, InputUtility.inputString ( &quot;\n Input New Role Name: &quot;, false ) ) ;</span>
-<span class="nc" id="L66">      System.out.println ( message );</span>
-<span class="nc" id="L67">    } catch ( Exception e ) {</span>
-<span class="nc" id="L68">      message = EmployeeController.message;</span>
-<span class="nc" id="L69">      throw e;</span>
-<span class="nc" id="L70">    }</span>
-<span class="nc" id="L71">    return message;</span>
+  private static String updateRole() throws Exception {
+<span class="nc" id="L61">      System.out.println(retrieveAllRoles());</span>
+<span class="nc" id="L62">      Roles role = null;</span>
+<span class="nc" id="L63">      role = roleController.retrieveRole(InputUtility.inputPositiveNumber(&quot;\n Input ID of Role to Update: &quot;, false));</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">      if ( role == null ) {</span>
+<span class="nc" id="L65">        System.out.println(&quot;Role does not exist!&quot;);</span>
+<span class="nc" id="L66">        throw new Exception();</span>
+      } else {
+<span class="nc" id="L68">        message = roleController.editRole(role, InputUtility.inputString(&quot;\n Input New Role Name: &quot;, false));</span>
+<span class="nc" id="L69">        System.out.println(message);</span>
+<span class="nc" id="L70">        return message;</span>
+      }
   }
 
-  public static String addNewRole () throws Exception {
-<span class="nc" id="L75">    System.out.println ( retrieveAllRoles() );</span>
+  private static String addNewRole () throws Exception {
+<span class="nc" id="L75">    System.out.println(retrieveAllRoles());</span>
     try {
-<span class="nc" id="L77">      EmployeeController.addRole ( InputUtility.inputString ( &quot;\n Input New Role To Add: &quot;, false ));</span>
+<span class="nc" id="L77">      roleController.addRole(InputUtility.inputString(&quot;\n Input New Role To Add: &quot;, false));</span>
 <span class="nc" id="L78">      return &quot;Successfully Added New Role!&quot;;</span>
 <span class="nc" id="L79">    } catch ( Exception e ) {</span>
-<span class="nc" id="L80">      System.out.println ( EmployeeController.message );</span>
+<span class="nc" id="L80">      System.out.println(roleController.message);</span>
 <span class="nc" id="L81">      throw e;</span>
     }
   }
 
-  public static String removeRole () throws Exception {
+  private static String removeRole () throws Exception {
 <span class="nc" id="L86">      System.out.print(&quot;\033\143\n&quot;);</span>
-<span class="nc" id="L87">      System.out.println( &quot;\n ======== Delete Role ========\n\n &quot; );</span>
-<span class="nc" id="L88">      System.out.println ( retrieveAllRoles() );</span>
-<span class="nc" id="L89">      int id = InputUtility.inputPositiveNumber ( &quot;Input ID of Role To Delete: &quot;, false);</span>
+<span class="nc" id="L87">      System.out.println(&quot;\n ======== Delete Role ========\n\n &quot; );</span>
+<span class="nc" id="L88">      System.out.println(retrieveAllRoles());</span>
+<span class="nc" id="L89">      int id = InputUtility.inputPositiveNumber(&quot;Input ID of Role To Delete: &quot;, false);</span>
       try {
-<span class="nc" id="L91">          return EmployeeController.deleteRole ( id );</span>
+<span class="nc" id="L91">          return roleController.deleteRole(id);</span>
 <span class="nc" id="L92">      } catch ( ConstraintViolationException e ) {</span>
-<span class="nc" id="L93">        System.out.println ( &quot;Role is still assigned to at least one employee!&quot; );</span>
+<span class="nc" id="L93">        System.out.println(&quot;Role is still assigned to at least one employee!&quot;);</span>
 <span class="nc" id="L94">        throw e;</span>
 <span class="nc" id="L95">      } catch ( Exception e ) {</span>
-<span class="nc" id="L96">        System.out.println ( EmployeeController.message );</span>
+<span class="nc" id="L96">        System.out.println(&quot;Role does not exist!&quot;);</span>
 <span class="nc" id="L97">        throw e;</span>
       }
   }
 
-  public Set&lt;Roles&gt; getAllRoles() {
+  protected Set&lt;Roles&gt; getAllRoles() {
 <span class="nc" id="L102">    Set&lt;Roles&gt; roles = new HashSet&lt;&gt;();</span>
-<span class="nc" id="L103">    List&lt;Roles&gt; availableRoles = EmployeeController.retrieveElements ( Roles.class );</span>
+<span class="nc" id="L103">    List&lt;Roles&gt; availableRoles = roleController.retrieveAllRolesElements(Roles.class);</span>
 		while ( true )	{
 <span class="nc" id="L105">			System.out.println( &quot; \n\n ======== List of Roles ======== &quot; );</span>
 <span class="nc" id="L106">			availableRoles = availableRoles.stream()</span>
@@ -110,15 +110,15 @@ import org.hibernate.exception.ConstraintViolationException;
 <span class="nc bnc" id="L110" title="All 2 branches missed.">			if ( availableRoles.size()==0 ) {</span>
 <span class="nc" id="L111">				break;</span>
 			}
-<span class="nc" id="L113">			availableRoles.forEach ( System.out::println );</span>
-<span class="nc" id="L114">			int roleID = InputUtility.inputPositiveNumber( &quot; Input Role To Add (Enter role number): &quot;, false );</span>
+<span class="nc" id="L113">			availableRoles.forEach(System.out::println);</span>
+<span class="nc" id="L114">			int roleID = InputUtility.inputPositiveNumber(&quot;Input Role To Add (Enter role number): &quot;, false);</span>
 			try {
-<span class="nc" id="L116">				roles.add ( EmployeeController.retrieveRole ( roleID ) );</span>
+<span class="nc" id="L116">				roles.add(roleController.retrieveRole(roleID));</span>
 <span class="nc" id="L117">			} catch ( Exception exception ) {</span>
-<span class="nc" id="L118">				System.out.println ( &quot;Role not found! &quot; );</span>
+<span class="nc" id="L118">				System.out.println(&quot;Role not found! &quot;);</span>
 <span class="nc" id="L119">				continue;</span>
 <span class="nc" id="L120">			}</span>
-<span class="nc" id="L121">			boolean isDone = InputUtility.inputBoolean ( &quot;Are you done adding roles (Y|N): &quot; );</span>
+<span class="nc" id="L121">			boolean isDone = InputUtility.inputBoolean(&quot;Are you done adding roles (Y|N): &quot;);</span>
 <span class="nc bnc" id="L122" title="All 4 branches missed.">			if ( isDone &amp;&amp; roles.size()!=0 ) {</span>
 <span class="nc" id="L123">				break;</span>
 <span class="nc bnc" id="L124" title="All 4 branches missed.">			} else if ( isDone &amp;&amp; roles.size()==0 ) {</span>
@@ -133,31 +133,31 @@ import org.hibernate.exception.ConstraintViolationException;
 <span class="nc" id="L133">    return new RoleUI();</span>
   }
 
-  public static String retrieveAllRoles() throws Exception {
+  private static String retrieveAllRoles() throws Exception {
 <span class="nc" id="L137">    System.out.print(&quot;\033\143\n&quot;);</span>
 <span class="nc" id="L138">    StringBuilder stringBuilder = new StringBuilder();</span>
-<span class="nc" id="L139">    List&lt;Roles&gt; roles = EmployeeController.retrieveElements(Roles.class);</span>
+<span class="nc" id="L139">    List&lt;Roles&gt; roles = roleController.retrieveAllRolesElements(Roles.class);</span>
 <span class="nc" id="L140">    roles.stream()</span>
-<span class="nc" id="L141">      .sorted ( ( role1, role2 ) -&gt; Long.compare ( role1.getRoleID(), role2.getRoleID() ) )</span>
-<span class="nc" id="L142">      .forEach ( role -&gt; stringBuilder.append ( role + &quot;\n&quot; ) );</span>
+<span class="nc" id="L141">      .sorted((role1, role2) -&gt; Long.compare(role1.getRoleID(), role2.getRoleID()))</span>
+<span class="nc" id="L142">      .forEach(role -&gt; stringBuilder.append(role + &quot;\n&quot;));</span>
 <span class="nc" id="L143">    return stringBuilder.toString();</span>
   }
 
-  public String getEmployeeRolesToAdd ( Employee employee ) {
+  protected String getEmployeeRolesToAdd ( Employee employee ) {
 <span class="nc" id="L147">		StringBuilder stringBuilder = new StringBuilder();</span>
-<span class="nc" id="L148">		EmployeeController.retrieveElements ( Roles.class ) .stream()</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">											 .filter ( role -&gt; !employee.getRoles().contains ( role ) )</span>
-<span class="nc" id="L150">											 .sorted ( ( role1, role2 ) -&gt; Long.compare ( role1.getRoleID(), role2.getRoleID() ) )</span>
-<span class="nc" id="L151">											 .forEach ( role -&gt; stringBuilder.append ( role + &quot;\n&quot; ) );</span>
+<span class="nc" id="L148">		roleController.retrieveAllRolesElements(Roles.class).stream()</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">											 .filter(role -&gt; !employee.getRoles().contains(role))</span>
+<span class="nc" id="L150">											 .sorted((role1, role2) -&gt; Long.compare(role1.getRoleID(), role2.getRoleID()))</span>
+<span class="nc" id="L151">											 .forEach(role -&gt; stringBuilder.append(role + &quot;\n&quot;));</span>
 <span class="nc" id="L152">		return stringBuilder.toString();</span>
 	}
 
-  public String getEmployeeRolesToDelete ( Employee employee ) {
+  protected String getEmployeeRolesToDelete ( Employee employee ) {
 <span class="nc" id="L156">		StringBuilder stringBuilder = new StringBuilder();</span>
-<span class="nc" id="L157">		EmployeeController.retrieveElements ( Roles.class ) .stream()</span>
-<span class="nc" id="L158">											 .filter ( role -&gt; employee.getRoles().contains ( role ) )</span>
-<span class="nc" id="L159">											 .sorted ( ( role1,role2 ) -&gt; Long.compare ( role1.getRoleID(), role2.getRoleID() ) )</span>
-<span class="nc" id="L160">											 .forEach ( role -&gt; stringBuilder.append ( role + &quot;\n&quot; ) );</span>
+<span class="nc" id="L157">		roleController.retrieveAllRolesElements(Roles.class).stream()</span>
+<span class="nc" id="L158">											 .filter(role -&gt; employee.getRoles().contains(role))</span>
+<span class="nc" id="L159">											 .sorted((role1,role2) -&gt; Long.compare(role1.getRoleID(), role2.getRoleID()))</span>
+<span class="nc" id="L160">											 .forEach(role -&gt; stringBuilder.append(role + &quot;\n&quot;));</span>
 <span class="nc" id="L161">		return stringBuilder.toString();</span>
 	}
 

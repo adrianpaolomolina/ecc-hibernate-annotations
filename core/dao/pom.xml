@@ -32,6 +32,11 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.apm.core</groupId>
+      <artifactId>model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
 </project>

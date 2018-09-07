@@ -1,11 +1,22 @@
 package com.apm.core;
 
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Contact {
 
-  private Long contactId;
   private String contactType;
   private String contact;
-  private Employee employee;
 
   public Contact(){
   }
@@ -15,14 +26,7 @@ public class Contact {
     this.contact = contact;
   }
 
-  public Long getContactId() {
-    return this.contactId;
-  }
-
-  public void setContactId ( Long contactId ) {
-    this.contactId = contactId;
-  }
-
+  @Column( name = "Contact_Type" )
   public String getContactType() {
     return this.contactType;
   }
@@ -31,6 +35,7 @@ public class Contact {
     this.contactType = contactType;
   }
 
+  @Column( name = "Contact" )
   public String getContact() {
     return this.contact;
   }
@@ -39,17 +44,9 @@ public class Contact {
     this.contact = contact;
   }
 
-  public Employee getEmployee() {
-    return this.employee;
-  }
-
-  public void setEmployee ( Employee employee ) {
-    this.employee = employee;
-  }
-
   @Override
   public String toString() {
-    return this.contactId + " -- " + this.contactType + ": " + this.contact;
+    return this.contactType + ": " + this.contact;
   }
 
   @Override

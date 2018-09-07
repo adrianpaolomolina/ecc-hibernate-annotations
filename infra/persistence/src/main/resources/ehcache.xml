@@ -1,0 +1,38 @@
+<ehcache>
+  <diskStore path="/usr/local/pgsql/data"/>
+  <defaultCache
+     maxEntriesLocalHeap="10000"
+     eternal="false"
+     timeToIdleSeconds="120"
+     timeToLiveSeconds="120"
+     maxEntriesLocalDisk="10000000"
+     diskExpiryThreadIntervalSeconds="120"
+     memoryStoreEvictionPolicy="LRU">
+     <persistence strategy="localTempSwap"/>
+  </defaultCache>
+
+  <cache name = "Employee"
+    maxEntriesLocalHeap="1000"
+    eternal="false"
+    timeToIdleSeconds="60"
+    timeToLiveSeconds="120"
+    maxEntriesLocalDisk="10000"
+    diskExpiryThreadIntervalSeconds="120"
+    memoryStoreEvictionPolicy="LRU"
+    >
+    <persistence strategy="localTempSwap"/>
+  </cache>
+
+  <cache name = "Roles"
+    maxEntriesLocalHeap="500"
+    eternal="false"
+    timeToIdleSeconds="60"
+    timeToLiveSeconds="120"
+    maxEntriesLocalDisk="1000"
+    diskExpiryThreadIntervalSeconds="120"
+    memoryStoreEvictionPolicy="LRU"
+    >
+    <persistence strategy="localTempSwap"/>
+  </cache>
+
+</ehcache>

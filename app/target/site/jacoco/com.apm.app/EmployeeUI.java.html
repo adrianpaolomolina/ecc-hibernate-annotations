@@ -4,281 +4,331 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 import java.util.List;
+import java.util.HashMap;
 import com.apm.utility.InputUtility;
 import com.apm.core.Contact;
 import com.apm.core.Roles;
 import com.apm.core.Employee;
 import com.apm.core.EmployeeController;
 
-<span class="nc" id="L13">public class EmployeeUI {</span>
+<span class="nc" id="L14">public class EmployeeUI {</span>
 
-<span class="nc" id="L15">  public static String message = &quot;&quot;;</span>
+<span class="nc" id="L16">  private static EmployeeController employeeController = new EmployeeController();</span>
+<span class="nc" id="L17">  public static String message = &quot;&quot;;</span>
 
-  public static void printEmployeeMenu() {
-<span class="nc" id="L18">    System.out.println ( &quot;\n ======== EMPLOYEE MENU ========\n\n &quot;</span>
-                       + &quot; 1. Create Person \n &quot;
-                       + &quot; 2. List All Person \n &quot;
-                       + &quot; 3. Update Person \n &quot;
-                       + &quot; 4. Delete Person \n &quot;
-                       + &quot; 5. Go Back To Main Menu \n &quot;);
-<span class="nc" id="L24">  }</span>
+  private static void printEmployeeMenu() {
+<span class="nc" id="L20">    System.out.println( &quot;\n ======== EMPLOYEE MENU ======== \n\n &quot;</span>
+                      + &quot; 1. Create Employee              7. Display Employee Details \n &quot;
+                      + &quot; 2. Edit Employee Details        8. Display Employee Contacts \n &quot;
+                      + &quot; 3. Edit Employee Contacts       9. Display Employee Roles \n &quot;
+                      + &quot; 4. Add Role to Employee         10. Go Back To Main Menu \n &quot;
+                      + &quot; 5. Delete Role From Employee \n &quot;
+                      + &quot; 6. Delete Employee \n\n &quot;);
+<span class="nc" id="L27">  }</span>
 
   public void runEmployeeUI() {
     do {
-<span class="nc" id="L28">      printEmployeeMenu();</span>
-<span class="nc" id="L29">      String selection = InputUtility.inputChoice ( &quot;Select Operation: &quot; );</span>
+<span class="nc" id="L31">      printEmployeeMenu();</span>
+<span class="nc" id="L32">      String selection = InputUtility.inputChoice(&quot;Select Operation: &quot;);</span>
       try {
-<span class="nc bnc" id="L31" title="All 6 branches missed.">        switch ( selection ) {</span>
+<span class="nc bnc" id="L34" title="All 11 branches missed.">        switch ( selection ) {</span>
           case &quot;1&quot;:
-<span class="nc" id="L33">            System.out.println ( addNewEmployee() );</span>
-<span class="nc" id="L34">            break;</span>
-          case &quot;2&quot;:
-<span class="nc" id="L36">            System.out.println ( retrieveEmployees() );</span>
+<span class="nc" id="L36">            System.out.println ( addNewEmployee() );</span>
 <span class="nc" id="L37">            break;</span>
-          case &quot;3&quot;:
-<span class="nc" id="L39">            getEmployeeToEdit();</span>
-<span class="nc" id="L40">            break;</span>
-          case &quot;4&quot;:
-<span class="nc" id="L42">            System.out.println ( deleteEmployee() );</span>
-<span class="nc" id="L43">            break;</span>
-          case &quot;5&quot;:
-<span class="nc" id="L45">            break;</span>
-            default:
-          }
-<span class="nc" id="L48">      } catch ( Exception e ) {</span>
-<span class="nc" id="L49">      }</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">      if ( selection.equals(&quot;5&quot;) ) {</span>
-<span class="nc" id="L51">      break;</span>
-      }
-<span class="nc" id="L53">    } while ( true );</span>
-<span class="nc" id="L54">  }</span>
-
-  public static String addNewEmployee() throws Exception {
-<span class="nc" id="L57">    System.out.print(&quot;\033\143\n&quot;);</span>
-<span class="nc" id="L58">    System.out.println( &quot;\n ======== Add Employee ========\n\n &quot; );</span>
-<span class="nc" id="L59">    String lastName = InputUtility.inputString ( &quot;Input Last Name: &quot;, false );</span>
-<span class="nc" id="L60">    String firstName = InputUtility.inputString ( &quot;Input First Name: &quot;, false);</span>
-<span class="nc" id="L61">    String middleName = InputUtility.inputString ( &quot;Input Middle Name: &quot;, false);</span>
-<span class="nc" id="L62">    String suffix = InputUtility.inputString ( &quot;Input Suffix: &quot;, true );</span>
-<span class="nc" id="L63">    String title = InputUtility.inputString ( &quot;Input Title: &quot;, true );</span>
-<span class="nc" id="L64">    Date birthDate = InputUtility.inputDate ( &quot;Input Birth Date: &quot; );</span>
-<span class="nc" id="L65">    Date hireDate = InputUtility.inputDate ( &quot;Input Hire Date: &quot; );</span>
-<span class="nc" id="L66">    float gwa = InputUtility.inputFloat ( &quot;Input your GWA (Float) : &quot;, false);</span>
-<span class="nc" id="L67">    boolean isCurrentlyHired = InputUtility.inputBoolean ( &quot;Are You Currently Hired?: &quot;);</span>
-<span class="nc" id="L68">    System.out.println ( &quot;\n ======== ADDRESS ========\n\n &quot;);</span>
-<span class="nc" id="L69">    int streetNumber = InputUtility.inputPositiveNumber ( &quot;Input Street Number: &quot;, false );</span>
-<span class="nc" id="L70">    String streetName = InputUtility.inputString ( &quot;Input Street Name: &quot;, false );</span>
-<span class="nc" id="L71">    String barangay = InputUtility.inputString ( &quot;Input Barangay Name: &quot;, false );</span>
-<span class="nc" id="L72">    String city = InputUtility.inputString ( &quot;Input City: &quot;, false );</span>
-<span class="nc" id="L73">    String zipCode = InputUtility.inputString ( &quot;Input Zip Code: &quot;, false );</span>
-<span class="nc" id="L74">    Set&lt;Contact&gt; contacts = ContactUI.getInstance().getAllContacts ( true );</span>
-<span class="nc" id="L75">    Set&lt;Roles&gt; roles = RoleUI.getInstance().getAllRoles();</span>
-<span class="nc" id="L76">    EmployeeController.addEmployee ( lastName, firstName, middleName, suffix, title, birthDate, hireDate,</span>
-<span class="nc" id="L77">                      gwa, isCurrentlyHired, EmployeeController.createNewAddress ( streetNumber, streetName,</span>
-                      barangay, city, zipCode ), contacts, roles );
-<span class="nc" id="L79">    return &quot;Employee Successfully Added! &quot;;</span>
-    }
-
-  public static String deleteEmployee() throws Exception {
-<span class="nc" id="L83">    String message = &quot;&quot;;</span>
-<span class="nc" id="L84">    System.out.print(&quot;\033\143\n&quot;);</span>
-<span class="nc" id="L85">    System.out.println ( &quot;\n ======== Delete Employee ========\n\n &quot; );</span>
-<span class="nc" id="L86">    System.out.println ( retrieveEmployees() );</span>
-<span class="nc" id="L87">    int id = InputUtility.inputPositiveNumber ( &quot;Input ID of User To Delete: &quot;, false);</span>
-    try {
-<span class="nc" id="L89">      return EmployeeController.deleteEmployee ( id );</span>
-<span class="nc" id="L90">    } catch ( Exception e ) {</span>
-<span class="nc" id="L91">      System.out.println ( EmployeeController.message );</span>
-<span class="nc" id="L92">      throw e;</span>
-    }
-  }
-
-  public static String retrieveEmployees(){
-<span class="nc" id="L97">    System.out.print(&quot;\033\143\n&quot;);</span>
-<span class="nc" id="L98">  	StringBuilder stringBuilder = new StringBuilder();</span>
-<span class="nc" id="L99">  	List&lt;Employee&gt; employees = EmployeeController.retrieveElements(Employee.class);</span>
-<span class="nc" id="L100">  	employees.stream()</span>
-<span class="nc" id="L101">         .sorted ( ( employee1, employee2 ) -&gt; Long.compare ( employee1.getEmployeeId(), employee2.getEmployeeId() ) )</span>
-<span class="nc" id="L102">  			 .forEach ( employee -&gt; stringBuilder.append ( employee + &quot;\n&quot; ) );</span>
-<span class="nc" id="L103">  	return stringBuilder.toString();</span>
-  }
-
-  public static void editEmployee ( Employee employee ) throws Exception {
-    do {
-<span class="nc" id="L108">      printEditEmployeeMenu();</span>
-<span class="nc" id="L109">      String option = InputUtility.inputChoice ( &quot;Select Operation: &quot; );</span>
-      try {
-<span class="nc bnc" id="L111" title="All 5 branches missed.">        switch ( option ) {</span>
-          case &quot;1&quot;:
-<span class="nc" id="L113">            updateEmployeeDetails ( employee );</span>
-<span class="nc" id="L114">            break;</span>
           case &quot;2&quot;:
-<span class="nc" id="L116">            employee = addEmployeeRole ( employee );</span>
-<span class="nc" id="L117">            break;</span>
+<span class="nc" id="L39">            updateEmployeeDetails ( getEmployeeToEdit() );</span>
+<span class="nc" id="L40">            break;</span>
           case &quot;3&quot;:
-<span class="nc" id="L119">            employee = deleteEmployeeRole ( employee );</span>
-<span class="nc" id="L120">            break;</span>
+<span class="nc" id="L42">            ContactUI.getInstance().runContactUI();</span>
+<span class="nc" id="L43">            break;</span>
           case &quot;4&quot;:
-<span class="nc" id="L122">            break;</span>
-            default:
-<span class="nc" id="L124">            System.out.println ( &quot;\n Input not valid! &quot; );</span>
-            break;
+<span class="nc" id="L45">            addEmployeeRole ( getEmployeeToEdit() );</span>
+<span class="nc" id="L46">            break;</span>
+          case &quot;5&quot;:
+<span class="nc" id="L48">            deleteEmployeeRole ( getEmployeeToEdit() );</span>
+<span class="nc" id="L49">            break;</span>
+          case &quot;6&quot;:
+<span class="nc" id="L51">            System.out.println(deleteEmployee());</span>
+<span class="nc" id="L52">            break;</span>
+          case &quot;7&quot;:
+<span class="nc" id="L54">            displayEmployeeMenu();</span>
+<span class="nc" id="L55">            break;</span>
+          case &quot;8&quot;:
+<span class="nc" id="L57">            displayEmployeeWithChild(&quot;CONTACTS&quot;);</span>
+<span class="nc" id="L58">            break;</span>
+          case &quot;9&quot;:
+<span class="nc" id="L60">            displayEmployeeWithChild(&quot;ROLES&quot;);</span>
+<span class="nc" id="L61">            break;</span>
+          case &quot;10&quot;:
+<span class="nc" id="L63">            break;</span>
+<span class="nc" id="L64">            default: System.out.println(&quot;Invalid Option.&quot;);</span>
           }
+<span class="nc" id="L66">      } catch(Exception e) {</span>
+<span class="nc" id="L67">      }</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">      if (selection.equals(&quot;10&quot;)) {</span>
+<span class="nc" id="L69">      break;</span>
+    }
+<span class="nc" id="L71">    } while (true);</span>
+<span class="nc" id="L72">  }</span>
 
-<span class="nc bnc" id="L128" title="All 2 branches missed.">        if ( option.equals(&quot;4&quot;) ) {</span>
-<span class="nc" id="L129">          break;</span>
-<span class="nc bnc" id="L130" title="All 4 branches missed.">        } else if ( option.equals(&quot;2&quot;) || option.equals(&quot;3&quot;) ) {</span>
-<span class="nc" id="L131">          System.out.println ( EmployeeController.updateElement ( employee ) );</span>
-        }
-<span class="nc" id="L133">      } catch ( Exception e ) {</span>
-<span class="nc" id="L134">        e.printStackTrace();</span>
-<span class="nc" id="L135">      }</span>
-<span class="nc" id="L136">    } while ( true );</span>
-<span class="nc" id="L137">  }</span>
+  private static void printDisplayEmployeeMenu() {
+<span class="nc" id="L75">    System.out.println ( &quot; \n\n======== Display Employee Menu ========\n\n &quot;</span>
+                        + &quot; 1. Sort by ID \n &quot;
+                        + &quot; 2. Sort by GWA \n &quot;
+                        + &quot; 3. Sort by Last Name \n &quot;
+                        + &quot; 4. Sort by Hire Date \n &quot;
+                        + &quot; 5. Go Back To Employee Menu \n &quot;);
+<span class="nc" id="L81">  }</span>
 
-  public static void printEditEmployeeMenu(){
-<span class="nc" id="L140">    System.out.println ( &quot; \n ======== Edit Employee ======== \n\n &quot;</span>
-                        + &quot; 1. Edit Employee Details \n &quot;
-                        + &quot; 2. Add Roles \n &quot;
-                        + &quot; 3. Delete Role \n &quot;
-                        + &quot; 4. Go Back To Employee Menu \n &quot; );
-<span class="nc" id="L145">  }</span>
-
-  public static void getEmployeeToEdit() throws Exception {
+  private static void displayEmployeeMenu() {
     do {
-<span class="nc" id="L149">      Employee employee = null;</span>
-<span class="nc" id="L150">      System.out.println ( &quot; \n ======== Choose Employee To Edit &quot; );</span>
-<span class="nc" id="L151">      System.out.println ( retrieveEmployees() );</span>
-<span class="nc" id="L152">      int employeeId = InputUtility.inputPositiveNumber ( &quot;Select Employee To Edit: &quot;, false );</span>
+<span class="nc" id="L85">      printDisplayEmployeeMenu();</span>
+<span class="nc" id="L86">      List&lt;Employee&gt; employee = employeeController.retrieveAllEmployeeElements(Employee.class);</span>
+<span class="nc" id="L87">      String selection = InputUtility.inputChoice(&quot;Select Operation: &quot;);</span>
+<span class="nc bnc" id="L88" title="All 6 branches missed.">      switch ( selection ) {</span>
+        case &quot;1&quot;:
+<span class="nc" id="L90">        System.out.println(retrieveEmployees());</span>
+<span class="nc" id="L91">        break;</span>
+        case &quot;2&quot;:
+<span class="nc" id="L93">        employee = employeeController.sortByGwa(employee);</span>
+<span class="nc" id="L94">        break;</span>
+        case &quot;3&quot;:
+<span class="nc" id="L96">        employee = employeeController.sortByLastName(employee);</span>
+<span class="nc" id="L97">        break;</span>
+        case &quot;4&quot;:
+<span class="nc" id="L99">        employee = employeeController.sortByHireDate(employee);</span>
+<span class="nc" id="L100">        break;</span>
+        case &quot;5&quot;:
+<span class="nc" id="L102">        break;</span>
+        default:
+      }
+<span class="nc bnc" id="L105" title="All 2 branches missed.">      if ( selection.equals(&quot;5&quot;) ) {</span>
+<span class="nc" id="L106">        break;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">      } else if ( selection.equals(&quot;1&quot;)) {</span>
+
+      } else {
+<span class="nc" id="L110">        employee.stream()</span>
+<span class="nc" id="L111">              .forEach(System.out::println);</span>
+      }
+<span class="nc" id="L113">    } while ( true );</span>
+<span class="nc" id="L114">  }</span>
+
+  private static String addNewEmployee() throws Exception {
+<span class="nc" id="L117">    System.out.print(&quot;\033\143\n&quot;);</span>
+<span class="nc" id="L118">    System.out.println( &quot;\n ======== Add Employee ========\n\n &quot; );</span>
+<span class="nc" id="L119">    String lastName = InputUtility.inputString( &quot;Input Last Name: &quot;, false );</span>
+<span class="nc" id="L120">    String firstName = InputUtility.inputString( &quot;Input First Name: &quot;, false);</span>
+<span class="nc" id="L121">    String middleName = InputUtility.inputString( &quot;Input Middle Name: &quot;, false);</span>
+<span class="nc" id="L122">    String suffix = InputUtility.inputString( &quot;Input Suffix: &quot;, true );</span>
+<span class="nc" id="L123">    String title = InputUtility.inputString( &quot;Input Title: &quot;, true );</span>
+<span class="nc" id="L124">    Date birthDate = InputUtility.inputDate( &quot;Input Birth Date ( YYYY-MM-DD ): &quot; );</span>
+<span class="nc" id="L125">    Date hireDate = InputUtility.inputDate( &quot;Input Hire Date ( YYYY-MM-DD ): &quot; );</span>
+<span class="nc" id="L126">    float gwa = InputUtility.inputFloat( &quot;Input your GWA (Float) : &quot;, false);</span>
+<span class="nc" id="L127">    boolean isCurrentlyHired = InputUtility.inputBoolean ( &quot;Are You Currently Hired? ( Y or N ): &quot;);</span>
+<span class="nc" id="L128">    System.out.println( &quot;\n ======== ADDRESS ========\n\n &quot;);</span>
+<span class="nc" id="L129">    int streetNumber = InputUtility.inputPositiveNumber( &quot;Input Street Number: &quot;, false );</span>
+<span class="nc" id="L130">    String barangay = InputUtility.inputString( &quot;Input Barangay Name: &quot;, false );</span>
+<span class="nc" id="L131">    String streetName = InputUtility.inputString( &quot;Input Street Name: &quot;, false );</span>
+<span class="nc" id="L132">    String city = InputUtility.inputString( &quot;Input City: &quot;, false );</span>
+<span class="nc" id="L133">    String zipCode = InputUtility.inputString( &quot;Input Zip Code: &quot;, false );</span>
+<span class="nc" id="L134">    Set&lt;Contact&gt; contacts = ContactUI.getInstance().getAllContacts ( true );</span>
+<span class="nc" id="L135">    Set&lt;Roles&gt; roles = RoleUI.getInstance().getAllRoles();</span>
+<span class="nc" id="L136">    employeeController.addEmployee(employeeController.createEmployeeName(lastName, firstName, middleName, suffix, title ), birthDate, hireDate,</span>
+<span class="nc" id="L137">                      gwa, isCurrentlyHired, employeeController.createNewAddress(streetNumber, streetName,</span>
+                      barangay, city, zipCode), contacts, roles );
+<span class="nc" id="L139">    return &quot;Employee Successfully Added! &quot;;</span>
+    }
+
+  private static String deleteEmployee() throws Exception {
+<span class="nc" id="L143">    String message = &quot;&quot;;</span>
+<span class="nc" id="L144">    System.out.print(&quot;\033\143\n&quot;);</span>
+<span class="nc" id="L145">    System.out.println( &quot;\n ======== Delete Employee ========\n\n &quot; );</span>
+<span class="nc" id="L146">    System.out.println( retrieveEmployees() );</span>
+<span class="nc" id="L147">    int id = InputUtility.inputPositiveNumber ( &quot;Input ID of User To Delete: &quot;, false);</span>
+    try {
+<span class="nc" id="L149">      return employeeController.deleteEmployee ( id );</span>
+<span class="nc" id="L150">    } catch ( Exception e ) {</span>
+<span class="nc" id="L151">      System.out.println ( employeeController.message );</span>
+<span class="nc" id="L152">      throw e;</span>
+    }
+  }
+
+  protected static String retrieveEmployees(){
+<span class="nc" id="L157">    System.out.print(&quot;\033\143\n&quot;);</span>
+<span class="nc" id="L158">  	StringBuilder stringBuilder = new StringBuilder();</span>
+<span class="nc" id="L159">  	List&lt;Employee&gt; employees = employeeController.retrieveAllEmployeeElements(Employee.class);</span>
+<span class="nc" id="L160">  	employees.stream()</span>
+<span class="nc" id="L161">         .sorted((employee1, employee2) -&gt; Long.compare(employee1.getEmployeeId(), employee2.getEmployeeId()))</span>
+<span class="nc" id="L162">  			 .forEach(employee -&gt; stringBuilder.append(employee + &quot;\n&quot; ));</span>
+<span class="nc" id="L163">  	return stringBuilder.toString();</span>
+  }
+
+  protected static Employee getEmployeeToEdit() throws Exception {
+    do {
+<span class="nc" id="L168">      Employee employee = null;</span>
+<span class="nc" id="L169">      System.out.println(&quot; \n ======== Choose Employee To Edit &quot;);</span>
+<span class="nc" id="L170">      System.out.println(retrieveEmployees());</span>
+<span class="nc" id="L171">      int employeeId = InputUtility.inputPositiveNumber(&quot;Select Employee To Edit: &quot;, false);</span>
       try {
-<span class="nc" id="L154">        employee = EmployeeController.getEmployee ( employeeId );</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">        if ( !employee.equals(null) ) {</span>
-<span class="nc" id="L156">          editEmployee( employee );</span>
-        }
-<span class="nc" id="L158">        break;</span>
-<span class="nc" id="L159">      } catch ( Exception e ) {</span>
-<span class="nc" id="L160">        System.out.println ( &quot;Employee does not exist!&quot; );</span>
-<span class="nc" id="L161">        throw e;</span>
+<span class="nc" id="L173">        employee = employeeController.getEmployeeWithRoles(employeeId);</span>
+<span class="nc" id="L174">        return employee;</span>
+<span class="nc" id="L175">      } catch ( Exception e ) {</span>
+<span class="nc" id="L176">        System.out.println(&quot;Employee does not exist!&quot;);</span>
+<span class="nc" id="L177">        throw e;</span>
       }
     } while ( true );
-<span class="nc" id="L164">  }</span>
-
-  public static void updateEmployeeDetails ( Employee employee ) throws Exception {
-    do {
-<span class="nc" id="L168">      printUpdateEmployeeDetailsMenu();</span>
-<span class="nc" id="L169">      String option = InputUtility.inputChoice ( &quot; \nSelect what to edit: &quot; );</span>
-<span class="nc bnc" id="L170" title="All 7 branches missed.">      switch ( option ) {</span>
-        case &quot;1&quot;:
-<span class="nc" id="L172">        employee = editEmployeeName ( employee );</span>
-<span class="nc" id="L173">        break;</span>
-        case &quot;2&quot;:
-<span class="nc" id="L175">        employee = editBirthDate ( employee );</span>
-<span class="nc" id="L176">        break;</span>
-        case &quot;3&quot;:
-<span class="nc" id="L178">        employee = editAddress ( employee );</span>
-<span class="nc" id="L179">        break;</span>
-        case &quot;4&quot;:
-<span class="nc" id="L181">        employee = editGwa ( employee );</span>
-<span class="nc" id="L182">        break;</span>
-        case &quot;5&quot;:
-<span class="nc" id="L184">        employee = editJobInformation ( employee );</span>
-<span class="nc" id="L185">        break;</span>
-        case &quot;6&quot;:
-<span class="nc" id="L187">        break;</span>
-        default:
-<span class="nc" id="L189">        System.out.println ( &quot;Option not Valid! &quot;);</span>
-        break;
-      }
-<span class="nc bnc" id="L192" title="All 2 branches missed.">      if ( option.equals(&quot;6&quot;) ) {</span>
-<span class="nc" id="L193">        break;</span>
-      } else {
-<span class="nc" id="L195">        System.out.println( &quot;\n&quot; + EmployeeController.updateElement(employee));</span>
-      }
-<span class="nc" id="L197">    } while ( true );</span>
-<span class="nc" id="L198">  }</span>
-
-  public static Employee editEmployeeName ( Employee employee ) {
-<span class="nc" id="L201">    System.out.println (&quot; \n ======== Edit Employee Name ======== \n\n &quot;);</span>
-<span class="nc" id="L202">  	employee.setLastName ( InputUtility.inputString(&quot;Input Last Name : &quot;, false) );</span>
-<span class="nc" id="L203">  	employee.setFirstName ( InputUtility.inputString(&quot;Input First Name : &quot;, false) );</span>
-<span class="nc" id="L204">  	employee.setMiddleName ( InputUtility.inputString(&quot;Input Middle Name : &quot;, false) );</span>
-<span class="nc" id="L205">  	employee.setSuffix ( InputUtility.inputString(&quot;Input Suffix : &quot;, true) );</span>
-<span class="nc" id="L206">  	employee.setTitle ( InputUtility.inputString(&quot;Input Title : &quot;, true) );</span>
-<span class="nc" id="L207">    return employee;</span>
   }
 
-  public static void printUpdateEmployeeDetailsMenu() {
-<span class="nc" id="L211">  System.out.println( &quot; \n ======== Edit Employee Details ========\n\n &quot;</span>
+  private static void updateEmployeeDetails ( Employee employee ) throws Exception {
+    do {
+<span class="nc" id="L184">      System.out.print(&quot;\033\143\n&quot;);</span>
+<span class="nc" id="L185">      System.out.println(employee);</span>
+<span class="nc" id="L186">      printUpdateEmployeeDetailsMenu();</span>
+<span class="nc" id="L187">      String option = InputUtility.inputChoice ( &quot; \nSelect what to edit: &quot; );</span>
+<span class="nc bnc" id="L188" title="All 7 branches missed.">      switch ( option ) {</span>
+        case &quot;1&quot;:
+<span class="nc" id="L190">        employee = editEmployeeName(employee);</span>
+<span class="nc" id="L191">        break;</span>
+        case &quot;2&quot;:
+<span class="nc" id="L193">        employee = editBirthDate(employee);</span>
+<span class="nc" id="L194">        break;</span>
+        case &quot;3&quot;:
+<span class="nc" id="L196">        employee = editAddress(employee);</span>
+<span class="nc" id="L197">        break;</span>
+        case &quot;4&quot;:
+<span class="nc" id="L199">        employee = editGwa(employee);</span>
+<span class="nc" id="L200">        break;</span>
+        case &quot;5&quot;:
+<span class="nc" id="L202">        employee = editJobInformation(employee);</span>
+<span class="nc" id="L203">        break;</span>
+        case &quot;6&quot;:
+<span class="nc" id="L205">        break;</span>
+        default:
+<span class="nc" id="L207">        System.out.println( &quot;Option not Valid! &quot;);</span>
+        break;
+      }
+<span class="nc bnc" id="L210" title="All 2 branches missed.">      if ( option.equals(&quot;6&quot;) ) {</span>
+<span class="nc" id="L211">        break;</span>
+      } else {
+<span class="nc" id="L213">        System.out.println( &quot;\n&quot; + employeeController.updateEmployeeElement(employee));</span>
+<span class="nc" id="L214">        break;</span>
+      }
+    } while ( true );
+<span class="nc" id="L217">  }</span>
+
+  private static Employee editEmployeeName ( Employee employee ) {
+<span class="nc" id="L220">    System.out.println (&quot; \n ======== Edit Employee Name ======== \n\n &quot;);</span>
+<span class="nc" id="L221">  	employee.getEmployeeName().setLastName(InputUtility.inputString(&quot;Input Last Name : &quot;, false));</span>
+<span class="nc" id="L222">  	employee.getEmployeeName().setFirstName(InputUtility.inputString(&quot;Input First Name : &quot;, false));</span>
+<span class="nc" id="L223">  	employee.getEmployeeName().setMiddleName(InputUtility.inputString(&quot;Input Middle Name : &quot;, false));</span>
+<span class="nc" id="L224">  	employee.getEmployeeName().setSuffix(InputUtility.inputString(&quot;Input Suffix : &quot;, true) );</span>
+<span class="nc" id="L225">  	employee.getEmployeeName().setTitle(InputUtility.inputString(&quot;Input Title : &quot;, true) );</span>
+<span class="nc" id="L226">    return employee;</span>
+  }
+
+  private static void printUpdateEmployeeDetailsMenu() {
+<span class="nc" id="L230">  System.out.println( &quot; \n ======== Edit Employee Details ========\n\n &quot;</span>
                       + &quot; 1. Edit Name \n &quot;
                       + &quot; 2. Edit Birth Date \n &quot;
                       + &quot; 3. Edit Address \n &quot;
                       + &quot; 4. Edit GWA \n &quot;
                       + &quot; 5. Edit Job Information \n &quot;
                       + &quot; 6. Go Back To Edit Employee Menu &quot;);
-<span class="nc" id="L218">  }</span>
+<span class="nc" id="L237">  }</span>
 
-  public static Employee editBirthDate ( Employee employee ) throws Exception {
-<span class="nc" id="L221">    System.out.println ( &quot; \n\n ======== Edit Birth Date ======== \n\n &quot; );</span>
-<span class="nc" id="L222">    System.out.println ( &quot;Current Birth Date: &quot; + employee.getBirthDate() + &quot;\n\n &quot; );</span>
-<span class="nc" id="L223">    employee.setBirthDate ( InputUtility.inputDate(&quot;Input Birthdate (yyyy-mm-dd): &quot;) );</span>
-<span class="nc" id="L224">    return employee;</span>
+  private static Employee editBirthDate ( Employee employee ) throws Exception {
+<span class="nc" id="L240">    System.out.println(&quot; \n\n ======== Edit Birth Date ======== \n\n &quot;);</span>
+<span class="nc" id="L241">    System.out.println(&quot;Current Birth Date: &quot; + employee.getBirthDate() + &quot;\n\n &quot;);</span>
+<span class="nc" id="L242">    Date birthDate = InputUtility.inputDate(&quot;Input Birthdate (yyyy-mm-dd): &quot;);</span>
+<span class="nc" id="L243">    employee.setBirthDate(birthDate);</span>
+<span class="nc" id="L244">    return employee;</span>
   }
 
-  public static Employee editAddress ( Employee employee ) throws Exception {
-<span class="nc" id="L228">    System.out.println(&quot; \n\n ======== Edit Address ======== \n\n &quot;);</span>
-<span class="nc" id="L229">    System.out.println( &quot;Current Address: &quot; + employee.getAddress().toString() + &quot;\n\n &quot;);</span>
-<span class="nc" id="L230">    employee.getAddress().setStreetNumber(InputUtility.inputPositiveNumber(&quot;Input Street No: &quot;, false));</span>
-<span class="nc" id="L231">  	employee.getAddress().setStreetName(InputUtility.inputString(&quot;Input Street: &quot;, false));</span>
-<span class="nc" id="L232">  	employee.getAddress().setBarangay(InputUtility.inputString(&quot;Input Barangay: &quot;, false));</span>
-<span class="nc" id="L233">  	employee.getAddress().setCity(InputUtility.inputString(&quot;Input City: &quot;, false));</span>
-<span class="nc" id="L234">  	employee.getAddress().setZipCode(InputUtility.inputString(&quot;Input Zipcode: &quot;, false));</span>
-<span class="nc" id="L235">  	return employee;</span>
+  private static Employee editAddress ( Employee employee ) throws Exception {
+<span class="nc" id="L248">    System.out.println(&quot; \n\n ======== Edit Address ======== \n\n &quot;);</span>
+<span class="nc" id="L249">    System.out.println( &quot;Current Address: &quot; + employee.getAddress().toString() + &quot;\n\n &quot;);</span>
+<span class="nc" id="L250">    employee.getAddress().setStreetNumber(InputUtility.inputPositiveNumber(&quot;Input Street No: &quot;, false));</span>
+<span class="nc" id="L251">  	employee.getAddress().setStreetName(InputUtility.inputString(&quot;Input Street: &quot;, false));</span>
+<span class="nc" id="L252">  	employee.getAddress().setBarangay(InputUtility.inputString(&quot;Input Barangay: &quot;, false));</span>
+<span class="nc" id="L253">  	employee.getAddress().setCity(InputUtility.inputString(&quot;Input City: &quot;, false));</span>
+<span class="nc" id="L254">  	employee.getAddress().setZipCode(InputUtility.inputString(&quot;Input Zipcode: &quot;, false));</span>
+<span class="nc" id="L255">  	return employee;</span>
   }
 
-  public static Employee editGwa ( Employee employee ) throws Exception {
-<span class="nc" id="L239">    System.out.println ( &quot; \n\n ======== Edit GWA ======== \n\n &quot; );</span>
-<span class="nc" id="L240">    System.out.println ( &quot;Current GWA: &quot; + employee.getGwa() + &quot;\n\n &quot;);</span>
-<span class="nc" id="L241">    employee.setGwa ( InputUtility.inputFloat( &quot;Input GWA: &quot;, false ) );</span>
-<span class="nc" id="L242">    return employee;</span>
+  private static Employee editGwa ( Employee employee ) throws Exception {
+<span class="nc" id="L259">    System.out.println(&quot; \n\n ======== Edit GWA ======== \n\n &quot; );</span>
+<span class="nc" id="L260">    System.out.println(&quot;Current GWA: &quot; + employee.getGwa() + &quot;\n\n &quot;);</span>
+<span class="nc" id="L261">    employee.setGwa(InputUtility.inputFloat( &quot;Input GWA: &quot;, false ));</span>
+<span class="nc" id="L262">    return employee;</span>
   }
 
-  public static Employee editJobInformation ( Employee employee ) throws Exception {
-<span class="nc" id="L246">    System.out.println ( &quot; \n\n ======== Edit Job Information ======== \n\n &quot; );</span>
-<span class="nc" id="L247">    System.out.println ( &quot; Currently Hired : &quot; + employee.getIsCurrentlyHired()</span>
-<span class="nc" id="L248">                        + &quot; \n Current Hire Date: &quot; + employee.getHireDate() + &quot;\n\n &quot;);</span>
-<span class="nc" id="L249">    employee.setIsCurrentlyHired ( InputUtility.inputBoolean ( &quot;Are You Currently Hired?: &quot; ));</span>
-<span class="nc" id="L250">    employee.setHireDate ( InputUtility.inputDate ( &quot;Input Hire Date: &quot; ) );</span>
-<span class="nc" id="L251">    return employee;</span>
+  private static Employee editJobInformation ( Employee employee ) throws Exception {
+<span class="nc" id="L266">    System.out.println( &quot; \n\n ======== Edit Job Information ======== \n\n &quot; );</span>
+<span class="nc" id="L267">    System.out.println( &quot; Currently Hired : &quot; + employee.getIsCurrentlyHired()</span>
+<span class="nc" id="L268">                        + &quot; \n Current Hire Date: &quot; + employee.getHireDate() + &quot;\n\n &quot;);</span>
+<span class="nc" id="L269">    employee.setIsCurrentlyHired(InputUtility.inputBoolean( &quot;Are You Currently Hired?: &quot; ));</span>
+<span class="nc" id="L270">    employee.setHireDate(InputUtility.inputDate( &quot;Input Hire Date: &quot; ) );</span>
+<span class="nc" id="L271">    return employee;</span>
   }
 
-  public static Employee addEmployeeRole( Employee employee ) throws Exception {
-<span class="nc" id="L255">    System.out.println ( &quot; \n\n ======== Available Employee Roles ======== \n\n &quot;);</span>
-<span class="nc" id="L256">    System.out.println ( RoleUI.getInstance().getEmployeeRolesToAdd ( employee ) );</span>
-<span class="nc" id="L257">    int id = InputUtility.inputPositiveNumber ( &quot; Input Role ID: &quot;, false );</span>
+  protected static void addEmployeeRole( Employee employee ) throws Exception {
+<span class="nc" id="L275">    System.out.println( &quot; \n\n ======== Available Employee Roles ======== \n\n &quot;);</span>
+<span class="nc" id="L276">    System.out.println( &quot; Employee ID: &quot; + employee.getEmployeeId()</span>
+<span class="nc" id="L277">                      + &quot; Employee   : &quot; + employee.getEmployeeName() + &quot;\n&quot;);</span>
+<span class="nc" id="L278">    System.out.println( RoleUI.getInstance().getEmployeeRolesToAdd(employee));</span>
+<span class="nc" id="L279">    int id = InputUtility.inputPositiveNumber( &quot; Input Role ID: &quot;, false );</span>
     try {
-<span class="nc" id="L259">      EmployeeController.getNewEmployeeRoles ( employee, id );</span>
-<span class="nc" id="L260">    } catch ( NullPointerException e ) {</span>
-<span class="nc" id="L261">      System.out.println ( &quot;\n That Role is not available! &quot; );</span>
-<span class="nc" id="L262">      throw e;</span>
-<span class="nc" id="L263">    }</span>
-<span class="nc" id="L264">    return employee;</span>
-  }
+<span class="nc" id="L281">      employeeController.getNewEmployeeRoles(employee, id);</span>
+<span class="nc" id="L282">      employeeController.updateEmployeeElement( employee );</span>
+<span class="nc" id="L283">      System.out.println(&quot;Successfully Added Role to &quot; + employee.getEmployeeName());</span>
+<span class="nc" id="L284">    } catch ( Exception e ) {</span>
+<span class="nc" id="L285">      System.out.println(&quot;\n That Role is not available! &quot;);</span>
+<span class="nc" id="L286">      throw e;</span>
+<span class="nc" id="L287">    }</span>
+<span class="nc" id="L288">  }</span>
 
-  public static Employee deleteEmployeeRole ( Employee employee ) throws Exception {
-<span class="nc" id="L268">    System.out.println ( &quot; \n\n ======== Available Employee Roles ======== \n\n &quot; );</span>
-<span class="nc" id="L269">    System.out.println ( RoleUI.getInstance().getEmployeeRolesToDelete ( employee ) );</span>
-<span class="nc" id="L270">    int id = InputUtility.inputPositiveNumber ( &quot; Input Role ID: &quot;, false );</span>
+  protected static void deleteEmployeeRole ( Employee employee ) throws Exception {
+<span class="nc" id="L291">    System.out.println(&quot; \n\n ======== Available Employee Roles ======== \n\n &quot;);</span>
+<span class="nc" id="L292">    System.out.println(RoleUI.getInstance().getEmployeeRolesToDelete(employee));</span>
+<span class="nc" id="L293">    int id = InputUtility.inputPositiveNumber(&quot; Input Role ID: &quot;, false);</span>
     try {
-<span class="nc" id="L272">      EmployeeController.removeEmployeeRole ( employee, id );</span>
-<span class="nc" id="L273">    } catch ( NullPointerException e ) {</span>
-<span class="nc" id="L274">      System.out.println ( &quot;\n Employee does not have that role! &quot; );</span>
-<span class="nc" id="L275">      throw e;</span>
-<span class="nc" id="L276">    }</span>
-<span class="nc" id="L277">    return employee;</span>
-  }
+<span class="nc" id="L295">      employeeController.removeEmployeeRole(employee, id);</span>
+<span class="nc" id="L296">      System.out.println(&quot;Successfully Removed role from &quot; + employee.getEmployeeName());</span>
+<span class="nc" id="L297">      employeeController.updateEmployeeElement ( employee );</span>
+<span class="nc" id="L298">    } catch ( NullPointerException e ) {</span>
+<span class="nc" id="L299">      System.out.println( &quot;\n Employee does not have that role! &quot; );</span>
+<span class="nc" id="L300">      throw e;</span>
+<span class="nc" id="L301">    }</span>
+<span class="nc" id="L302">    employeeController.updateEmployeeElement ( employee );</span>
+<span class="nc" id="L303">  }</span>
+
+  protected static void displayEmployeeWithChild ( String type ) {
+<span class="nc" id="L306">      System.out.println(&quot;=======================&quot;);</span>
+<span class="nc" id="L307">      List&lt;Object[]&gt; employees = null;</span>
+      try {
+<span class="nc bnc" id="L309" title="All 2 branches missed.">        if ( type.equals(&quot;CONTACTS&quot;)) {</span>
+<span class="nc" id="L310">          employees = (List&lt;Object[]&gt;) employeeController.getEmployeesAndContacts();</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">        } else if ( type.equals(&quot;ROLES&quot;)) {</span>
+<span class="nc" id="L312">          employees = (List&lt;Object[]&gt;) employeeController.getEmployeesAndRoles();</span>
+        }
+<span class="nc" id="L314">        Long previousID = new Long(0);</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">        for ( Object[] employee : employees ) {</span>
+<span class="nc bnc" id="L316" title="All 2 branches missed.">          if ( previousID.equals(employee[0]) ){</span>
+<span class="nc" id="L317">            System.out.println(&quot;          &quot; + employee[4] + &quot; : &quot; + employee[5]);</span>
+          } else {
+<span class="nc" id="L319">            System.out.println(&quot;\nEmployee ID: &quot; + employee[0]);</span>
+<span class="nc" id="L320">            System.out.println(&quot;Employee: &quot; + employee[1] + &quot;, &quot; + employee[2] + &quot; &quot; + employee[3]);</span>
+<span class="nc" id="L321">            System.out.println(&quot;\n          &quot; + employee[4] + &quot; : &quot; + employee[5]);</span>
+          }
+<span class="nc" id="L323">          previousID = (Long) employee[0];</span>
+<span class="nc" id="L324">        }</span>
+<span class="nc" id="L325">      } catch ( Exception e ) {</span>
+<span class="nc" id="L326">        e.printStackTrace();</span>
+<span class="nc" id="L327">      }</span>
+<span class="nc" id="L328">  }</span>
 
   public static EmployeeUI getInstance() {
-<span class="nc" id="L281">    return new EmployeeUI();</span>
+<span class="nc" id="L331">    return new EmployeeUI();</span>
   }
 
 }
