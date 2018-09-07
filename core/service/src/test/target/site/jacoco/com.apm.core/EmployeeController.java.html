@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Service Core</a> &gt; <a href="index.source.html" class="el_package">com.apm.core</a> &gt; <span class="el_source">EmployeeController.java</span></div><h1>EmployeeController.java</h1><pre class="source lang-java linenums">package com.apm.core;
+
+import java.util.Date;
+import java.util.Set;
+import java.util.List;
+
+<span class="nc" id="L7">public class EmployeeController {</span>
+
+<span class="nc" id="L9">  public static Dao dao = new Dao();</span>
+<span class="nc" id="L10">  public static String message = &quot;&quot;;</span>
+
+  public static void addEmployee ( String lastName, String firstName, String middleName, String suffix,
+                      String title, Date birthDate, Date hireDate, float gwa, boolean isCurrentlyHired,
+                      Address address, Set&lt;Contact&gt; contacts, Set&lt;Roles&gt; roles ) {
+<span class="nc" id="L15">      Employee employee = new Employee ( lastName, firstName, middleName, suffix, title, birthDate, hireDate,</span>
+                      gwa, isCurrentlyHired, address, contacts, roles );
+<span class="nc" id="L17">      contacts.forEach ( contact -&gt; contact.setEmployee ( employee ) );</span>
+<span class="nc" id="L18">      dao.save ( employee );</span>
+<span class="nc" id="L19">  }</span>
+
+  public static void addRole ( String role ) throws Exception {
+<span class="nc" id="L22">    Roles newRole = new Roles ( role );</span>
+<span class="nc" id="L23">    boolean exist = false;</span>
+<span class="nc" id="L24">    List&lt;Roles&gt; roles = retrieveElements ( Roles.class );</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">    for ( Roles currentRoles : roles ) {</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">      if ( currentRoles.getRole().equals ( newRole.getRole() ) ) {</span>
+<span class="nc" id="L27">        exist = true;</span>
+<span class="nc" id="L28">        break;</span>
+      }
+<span class="nc" id="L30">    }</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">    if ( exist == false ) {</span>
+<span class="nc" id="L32">     dao.save ( newRole );</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">    } else if ( exist == true ){</span>
+<span class="nc" id="L34">      message = &quot; Role already exists! &quot;;</span>
+<span class="nc" id="L35">      throw new Exception();</span>
+    }
+<span class="nc" id="L37">  }</span>
+
+ public static String deleteEmployee ( int id ) throws Exception {
+    try {
+<span class="nc" id="L41">      Employee employee = getEmployee ( id );</span>
+<span class="nc" id="L42">      return &quot;Employee &quot; + dao.delete ( employee );</span>
+<span class="nc" id="L43">    } catch ( Exception e ) {</span>
+<span class="nc" id="L44">      message = &quot; Employee does not exist! &quot;;</span>
+<span class="nc" id="L45">      throw e;</span>
+    }
+  }
+
+  public static String deleteRole ( int id ) throws Exception {
+    try {
+<span class="nc" id="L51">      Roles role = retrieveRole ( id ) ;</span>
+<span class="nc" id="L52">      return dao.delete ( role );</span>
+<span class="nc" id="L53">    } catch ( Exception exception ) {</span>
+<span class="nc" id="L54">      throw exception;</span>
+    }
+  }
+
+  public static Employee getEmployee ( int id ) throws Exception {
+<span class="nc" id="L59">    Employee employee = new Employee();</span>
+<span class="nc" id="L60">    employee = dao.getSpecific ( Long.valueOf ( id ) , Employee.class );</span>
+<span class="nc" id="L61">    return employee;</span>
+  }
+
+  public static Address createNewAddress ( int streetNumber, String streetName, String barangay,
+                        String city, String zipCode ) {
+<span class="nc" id="L66">    return new Address ( streetNumber, streetName, barangay, city, zipCode );</span>
+  }
+
+  public static Contact createNewContact ( String contactType, String contact ) {
+<span class="nc" id="L70">    return new Contact ( contactType, contact );</span>
+  }
+
+  public static Roles createNewRoles ( String roles ) {
+<span class="nc" id="L74">    return new Roles ( roles );</span>
+  }
+
+  public static &lt;T&gt; List&lt;T&gt; retrieveElements (final Class&lt;T&gt; type) {
+<span class="nc" id="L78">    return dao.getAll(type);</span>
+  }
+
+  public static String updateElement ( Object object ) {
+<span class="nc" id="L82">    dao.update ( object );</span>
+<span class="nc" id="L83">    return &quot;Database successfully Updated!&quot;;</span>
+  }
+
+  public static Employee getNewEmployeeRoles ( Employee employee, int roleID ) throws Exception {
+<span class="nc" id="L87">		Set&lt;Roles&gt; roles = employee.getRoles();</span>
+<span class="nc" id="L88">		Roles role = dao.getSpecific ( Long.valueOf ( roleID ), Roles.class );</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">    if ( role == null ) {</span>
+<span class="nc" id="L90">      throw new NullPointerException();</span>
+    } else {
+<span class="nc" id="L92">      roles.add ( role );</span>
+<span class="nc" id="L93">  		employee.setRoles ( roles );</span>
+<span class="nc" id="L94">  		return employee;</span>
+    }
+  }
+
+  public static Employee removeEmployeeRole ( Employee employee, int roleID ) throws Exception {
+<span class="nc" id="L99">    Set&lt;Roles&gt; roles = employee.getRoles();</span>
+<span class="nc" id="L100">		Roles role = dao.getSpecific ( Long.valueOf ( roleID ), Roles.class );</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">    if ( role == null ) {</span>
+<span class="nc" id="L102">      throw new NullPointerException();</span>
+    } else {
+<span class="nc" id="L104">      roles.remove ( role );</span>
+<span class="nc" id="L105">  		employee.setRoles ( roles );</span>
+<span class="nc" id="L106">  		return employee;</span>
+    }
+  }
+
+  public static Roles retrieveRole ( int roleID ) throws Exception {
+<span class="nc" id="L111">    Roles role = new Roles();</span>
+		try {
+<span class="nc" id="L113">			role = dao.getSpecific ( Long.valueOf ( roleID ) , Roles.class );</span>
+<span class="nc" id="L114">			role.getRole();</span>
+<span class="nc" id="L115">		} catch ( NullPointerException e ) {</span>
+<span class="nc" id="L116">      message =  &quot;Role does not exist! &quot;;</span>
+<span class="nc" id="L117">      throw e;</span>
+<span class="nc" id="L118">		}</span>
+<span class="nc" id="L119">		return role;</span>
+  }
+
+  public static Employee addContact(Employee employee, Set&lt;Contact&gt; contacts) {
+<span class="nc" id="L123">		contacts.forEach(contact -&gt; {</span>
+<span class="nc" id="L124">			contact.setEmployee(employee);</span>
+<span class="nc" id="L125">			employee.getContacts().add(contact);</span>
+<span class="nc" id="L126">		});</span>
+<span class="nc" id="L127">		return employee;</span>
+	}
+
+  public static Contact getSpecificContact ( Long employeeId, int contactId ) throws Exception {
+<span class="nc" id="L131">    Contact contact = new Contact();</span>
+    try {
+<span class="nc" id="L133">      contact = dao.getSpecific ( Long.valueOf(contactId), Contact.class );</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">      if ( contact.getEmployee().getEmployeeId() != employeeId ) {</span>
+<span class="nc" id="L135">         message = &quot;Employee does not own this contact info!&quot;;</span>
+<span class="nc" id="L136">        throw new RuntimeException();</span>
+      }
+<span class="nc" id="L138">    } catch ( Exception e ) {</span>
+<span class="nc" id="L139">      message = &quot;Contact does not exist!&quot;;</span>
+<span class="nc" id="L140">      throw e;</span>
+<span class="nc" id="L141">    }</span>
+<span class="nc" id="L142">    return contact;</span>
+  }
+
+  public static String deleteContact ( Employee employee, Contact contact ) throws Exception {
+<span class="nc bnc" id="L146" title="All 2 branches missed.">    if ( employee.getContacts().size() == 1 ) {</span>
+<span class="nc" id="L147">      message =  &quot;Cannot Delete! The Contact of an Employee should at least be 1! &quot;;</span>
+<span class="nc" id="L148">      throw new RuntimeException();</span>
+    }
+<span class="nc" id="L150">    employee.getContacts().remove ( contact );</span>
+<span class="nc" id="L151">    return updateElement ( employee );</span>
+  }
+
+  public static String editRole ( Roles role, String newRoleName ) throws Exception {
+<span class="nc" id="L155">    String currentRoleName = role.getRole();</span>
+<span class="nc" id="L156">    role.setRole ( newRoleName );</span>
+		try {
+<span class="nc" id="L158">			Roles newRole = dao.get ( role );</span>
+<span class="nc" id="L159">			message = &quot;Role &quot; + newRoleName + &quot; already exists!&quot; ;</span>
+<span class="nc" id="L160">    } catch ( Exception exception ) {</span>
+<span class="nc" id="L161">      dao.update ( role );</span>
+<span class="nc" id="L162">      message = &quot;Successfully updated role &quot; + currentRoleName + &quot; to &quot; + role.getRole() + &quot;!&quot;;</span>
+<span class="nc" id="L163">		}</span>
+<span class="nc" id="L164">    return message ;</span>
+  }
+
+  public static String updateContact ( Employee employee, Contact contact, String newContact ) throws Exception {
+    try {
+<span class="nc" id="L169">      employee.getContacts().remove ( contact );</span>
+<span class="nc" id="L170">      contact.setContact ( newContact );</span>
+<span class="nc" id="L171">      employee.getContacts().add ( contact );</span>
+<span class="nc" id="L172">      dao.update ( contact );</span>
+<span class="nc" id="L173">      return &quot;Successfully changed contact details to &quot; + newContact;</span>
+<span class="nc" id="L174">    } catch ( Exception e ) {</span>
+<span class="nc" id="L175">      message = &quot; Failed to change contact details! &quot;;</span>
+<span class="nc" id="L176">      throw e;</span>
+    }
+  }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span></div></body></html>
